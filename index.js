@@ -38,7 +38,7 @@ app
     .get((req, res) => {
         res.sendFile(path.join(__dirname, "views", "upload-multiple.html"));
     })
-    .post(upload.array("files", 100), (req, res) => {
+    .post(upload.array("files", 15), (req, res) => {
         if (!req.files || req.files.length === 0) {
             return res.status(400).send('No files uploaded');
         }
