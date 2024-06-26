@@ -16,11 +16,13 @@
             <a href="/upload-multiple">Multiple Upload</a>
             <a href="/single">Single Random Image</a>
             <a href="/multiple-random">Multiple Random Images</a>
+            <a href="#" onclick="redirectToGallery()">Gallery</a>
+            <a href="#" onclick="redirectToGalleryPagination()">Gallery with Pagination</a>
         </div>
         <div class="content">
             <div class="tabs">
-                <button onclick="showGallery()">Gallery</button>
-                <button onclick="showGalleryPagination()">Gallery with Pagination</button>
+                <button onclick="redirectToGallery()">Gallery</button>
+                <button onclick="redirectToGalleryPagination()">Gallery with Pagination</button>
             </div>
             <div class="gallery" id="gallery"></div>
             <div class="gallery-pagination" id="gallery-pagination"></div>
@@ -29,6 +31,14 @@
     </div>
 
     <script>
+        function redirectToGallery() {
+            window.location.href = '/gallery';
+        }
+
+        function redirectToGalleryPagination() {
+            window.location.href = '/gallery-pagination';
+        }
+
         function showGallery() {
             document.getElementById('gallery').innerHTML = '';
             document.getElementById('gallery-pagination').innerHTML = '';
@@ -92,6 +102,21 @@
                     const container = document.getElementById('random-image');
                     container.innerHTML = '';
                     container.appendChild(imgElement);
+                });
+        }
+
+        function fetchRandomImages() {
+            const count = document.getElementById('imageCount').value;
+            fetch(`/random-images?count=${count}`)
+                .then(response => response.json())
+                .then(images => {
+                    const container = document.getElementById('random-images');
+                    container.innerHTML = '';
+                    images.forEach(image => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `uploads/${image}`;
+                        container.appendChild(imgElement);
+                    });
                 });
         }
     </script>
