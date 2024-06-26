@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Single Image</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <a href="/" style="text-decoration: none;">
+        <h1>Image File Storage</h1>
+    </a>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/upload">Single Upload</a>
+            <a href="/upload-multiple">Multiple Upload</a>
+            <a href="/single">Single Random Image</a>
+            <a href="/multiple-random">Multiple Random Images</a>
+        </div>
+        <div class="content">
+            <h2>Upload Single Image</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

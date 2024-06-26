@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image File Storage</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <a href="/" style="text-decoration: none;">
+        <h1>Image File Storage</h1>
+    </a>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/upload">Single Upload</a>
+            <a href="/upload-multiple">Multiple Upload</a>
+            <a href="/single">Single Random Image</a>
+            <a href="/multiple-random">Multiple Random Images</a>
+        </div>
+        <div class="content">
+            <div class="tabs">
+                <button onclick="showGallery()">Gallery</button>
+                <button onclick="showGalleryPagination()">Gallery with Pagination</button>
+            </div>
+            <div class="gallery" id="gallery"></div>
+            <div class="gallery-pagination" id="gallery-pagination"></div>
+            <div class="pagination-controls" id="pagination-controls"></div>
+        </div>
+    </div>
+
+    <script>
+        function showGallery() {
+            document.getElementById('gallery').innerHTML = '';
+            document.getElementById('gallery-pagination').innerHTML = '';
+            document.getElementById('pagination-controls').innerHTML = '';
+            fetchGallery();
+        }
+
+        function showGalleryPagination() {
+            document.getElementById('gallery').innerHTML = '';
+            document.getElementById('gallery-pagination').innerHTML = '';
+            document.getElementById('pagination-controls').innerHTML = '';
+            fetchGalleryPagination(1, 10);
+        }
+
+        function fetchGallery() {
+            fetch('/gallery')
+                .then(response => response.json())
+                .then(images => {
+                    const galleryContainer = document.getElementById('gallery');
+                    galleryContainer.innerHTML = '';
+                    images.forEach(image => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `uploads/${image}`;
+                        galleryContainer.appendChild(imgElement);
+                    });
+                });
+        }
+
+        function fetchGalleryPagination(page, limit) {
+            fetch(`/gallery-pagination?page=${page}&limit=${limit}`)
+                .then(response => response.json())
+                .then(data => {
+                    const galleryContainer = document.getElementById('gallery-pagination');
+                    const paginationControls = document.getElementById('pagination-controls');
+                    galleryContainer.innerHTML = '';
+                    paginationControls.innerHTML = '';
+
+                    data.data.forEach(image => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `uploads/${image}`;
+                        galleryContainer.appendChild(imgElement);
+                    });
+
+                    const totalPages = Math.ceil(data.total / limit);
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        const button = document.createElement('button');
+                        button.innerText = i;
+                        button.onclick = () => fetchGalleryPagination(i, limit);
+                        paginationControls.appendChild(button);
+                    }
+                });
+        }
+
+        function fetchRandomImage() {
+            fetch('/fetch-single')
+                .then(response => response.blob())
+                .then(imageBlob => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = URL.createObjectURL(imageBlob);
+                    const container = document.getElementById('random-image');
+                    container.innerHTML = '';
+                    container.appendChild(imgElement);
+                });
+        }
+    </script>
+</body>
+</html>

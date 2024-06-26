@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Random Image</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <a href="/" style="text-decoration: none;">
+        <h1>Image File Storage</h1>
+    </a>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/upload">Single Upload</a>
+            <a href="/upload-multiple">Multiple Upload</a>
+            <a href="/single">Single Random Image</a>
+            <a href="/multiple-random">Multiple Random Images</a>
+        </div>
+        <div class="content">
+            <h2>View Random Image</h2>
+            <button onclick="fetchRandomImage()">Fetch Random Image</button>
+            <div id="random-image"></div>
+        </div>
+    </div>
+
+    <script>
+        function fetchRandomImage() {
+            fetch('/fetch-single')
+                .then(response => response.blob())
+                .then(imageBlob => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = URL.createObjectURL(imageBlob);
+                    const container = document.getElementById('random-image');
+                    container.innerHTML = '';
+                    container.appendChild(imgElement);
+                });
+        }
+    </script>
+</body>
+</html>

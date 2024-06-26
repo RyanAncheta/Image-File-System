@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Multiple Random Images</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <a href="/" style="text-decoration: none;">
+        <h1>Image File Storage</h1>
+    </a>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/upload">Single Upload</a>
+            <a href="/upload-multiple">Multiple Upload</a>
+            <a href="/single">Single Random Image</a>
+            <a href="/multiple-random">Multiple Random Images</a>
+        </div>
+        <div class="content">
+            <h2>View Multiple Random Images</h2>
+            <input type="number" id="imageCount" placeholder="Number of images">
+            <button onclick="fetchRandomImages()">Fetch Random Images</button>
+            <div id="random-images" class="gallery"></div>
+        </div>
+    </div>
+
+    <script>
+        function fetchRandomImages() {
+            const count = document.getElementById('imageCount').value;
+            fetch(`/random-images?count=${count}`)
+                .then(response => response.json())
+                .then(images => {
+                    const container = document.getElementById('random-images');
+                    container.innerHTML = '';
+                    images.forEach(image => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `uploads/${image}`;
+                        container.appendChild(imgElement);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
