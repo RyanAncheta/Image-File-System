@@ -91,7 +91,38 @@ app.get("/gallery", (req, res) => {
     if (uploads.length == 0) {
         return res.status(404).send('No files found');
     }
-    res.json(uploads);
+
+    let galleryHTML = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gallery</title>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        <a href="/" style="text-decoration: none;">
+            <h1>Image File Storage</h1>
+        </a>
+        <div class="container">
+            <div class="sidebar">
+                <a href="/upload">Single Upload</a>
+                <a href="/upload-multiple">Multiple Upload</a>
+                <a href="/single">Single Random Image</a>
+                <a href="/multiple-random">Multiple Random Images</a>
+            </div>
+            <div class="content">
+                <h2>Gallery</h2>
+                <div class="gallery" id="gallery">
+                    ${uploads.map(image => `<img src="/uploads/${image}" alt="${image}">`).join('')}
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    res.send(galleryHTML);
 });
 
 app.get("/gallery-pagination", (req, res) => {
@@ -105,12 +136,42 @@ app.get("/gallery-pagination", (req, res) => {
     }
 
     const paginatedFiles = uploads.slice((page - 1) * limit, page * limit);
-    res.json({
-        page,
-        limit,
-        total: uploads.length,
-        data: paginatedFiles
-    });
+    const totalPages = Math.ceil(uploads.length / limit);
+
+    let galleryPaginationHTML = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gallery with Pagination</title>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        <a href="/" style="text-decoration: none;">
+            <h1>Image File Storage</h1>
+        </a>
+        <div class="container">
+            <div class="sidebar">
+                <a href="/upload">Single Upload</a>
+                <a href="/upload-multiple">Multiple Upload</a>
+                <a href="/single">Single Random Image</a>
+                <a href="/multiple-random">Multiple Random Images</a>
+            </div>
+            <div class="content">
+                <h2>Gallery with Pagination</h2>
+                <div class="gallery-pagination" id="gallery-pagination">
+                    ${paginatedFiles.map(image => `<img src="/uploads/${image}" alt="${image}">`).join('')}
+                </div>
+                <div class="pagination-controls" id="pagination-controls">
+                    ${Array.from({ length: totalPages }, (_, i) => `<button onclick="window.location.href='/gallery-pagination?page=${i + 1}&limit=${limit}'">${i + 1}</button>`).join('')}
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    res.send(galleryPaginationHTML);
 });
 
 app.get("/single", (req, res) => {
