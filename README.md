@@ -1,6 +1,6 @@
 # Image File Storage Application
 
-Express.js app for image upload and gallery viewing, featuring single/multiple uploads, random image display, and pagination. GitHub repo included.
+Express.js app for image upload and gallery viewing, featuring single/multiple uploads, random image display, and pagination. 
 
 ## Features
 
